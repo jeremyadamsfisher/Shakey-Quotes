@@ -102,3 +102,8 @@ ENV/
 
 # demo_app
 demo_app/node_modules/
+
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
