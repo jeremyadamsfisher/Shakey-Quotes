@@ -48,7 +48,7 @@ if (os.path.isfile(_PICKLE_IDX_WRD_FILE) and os.path.isfile(_PICKLE_WRD_IDX_FILE
 else:
     # Read the CSV file.
     sentences = read_csv(_SRC_DATA)
-    
+
     # Tokenize the sentences into words
     tokenized_sentences = [nltk.word_tokenize(sent) for sent in sentences]
 
