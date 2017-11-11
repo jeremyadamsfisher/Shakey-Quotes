@@ -27,7 +27,7 @@ sentence_end_token = 'SENTENCE_END'
 
 def read_csv(csv_file):
     if csv_file.endswith('csv'):
-        print 'Reading CSV file...'
+        #print 'Reading CSV file...'
         with open(csv_file, 'rU') as f:
             reader = csv.reader(f, skipinitialspace=True)
             reader.next()
@@ -40,7 +40,7 @@ def read_csv(csv_file):
     return sentences
 
 if (os.path.isfile(_PICKLE_IDX_WRD_FILE) and os.path.isfile(_PICKLE_WRD_IDX_FILE)):
-    print 'Loading exisitng Pickle files'
+    #print 'Loading exisitng Pickle files'
     with open(_PICKLE_IDX_WRD_FILE, 'rb') as pkl_file:
         index_to_word = pickle.load(pkl_file)
     with open(_PICKLE_WRD_IDX_FILE, 'rb') as pkl_file:
@@ -133,4 +133,7 @@ def generate_quote():
         if  4 >= len(new_quote.split('\n')) > 2:
             return new_quote
 
-print generate_quote()
+output = generate_quote()
+
+with open('output.txt','w') as f:
+    f.write(output)
