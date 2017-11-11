@@ -40,7 +40,7 @@ def read_csv(csv_file):
     return sentences
 
 if (os.path.isfile(_PICKLE_IDX_WRD_FILE) and os.path.isfile(_PICKLE_WRD_IDX_FILE)):
-    print 'Loading exisitng Pickle files'
+    print 'Loading existing Pickle files'
     with open(_PICKLE_IDX_WRD_FILE, 'rb') as pkl_file:
         index_to_word = pickle.load(pkl_file)
     with open(_PICKLE_WRD_IDX_FILE, 'rb') as pkl_file:
