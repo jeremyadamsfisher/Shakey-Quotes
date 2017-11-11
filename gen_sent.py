@@ -45,7 +45,7 @@ if (os.path.isfile(_PICKLE_IDX_WRD_FILE) and os.path.isfile(_PICKLE_WRD_IDX_FILE
         index_to_word = pickle.load(pkl_file)
     with open(_PICKLE_WRD_IDX_FILE, 'rb') as pkl_file:
         word_to_index = pickle.load(pkl_file)
-else
+else:
     # Read the CSV file.
     sentences = read_csv(_SRC_DATA)
     
