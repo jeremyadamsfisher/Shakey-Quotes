@@ -13,12 +13,16 @@ from datetime import datetime
 from utils import *
 from rnn_theano import RNNTheano
 
+# Download the NLTK libraries, which we only need to do once
+nltk.download('punkt')
+
+# Settings
 _MODEL_FILE = 'data/rnn-theano-80-5000-2017-11-10-17-55-23.npz'
 _SRC_DATA = 'data/Shakespeare_Tragedies.csv'
 _PICKLE_IDX_WRD_FILE = 'data/Idx_Wrd.pickle'
 _PICKLE_WRD_IDX_FILE = 'data/Wrd_Idx.pickle'
 
-_VOCABULARY_SIZE = 8000
+_VOCABULARY_SIZE = 5000
 _HIDDEN_DIM = 80
 
 unknown_token = 'UNKNOWN_TOKEN'
@@ -27,7 +31,7 @@ sentence_end_token = 'SENTENCE_END'
 
 def read_csv(csv_file):
     if csv_file.endswith('csv'):
-        #print 'Reading CSV file...'
+        print 'Reading CSV file...'
         with open(csv_file, 'rU') as f:
             reader = csv.reader(f, skipinitialspace=True)
             reader.next()
@@ -36,7 +40,7 @@ def read_csv(csv_file):
             # Append SENTENCE_START and SENTENCE_END
             sentences = ['%s %s %s' % (sentence_start_token, x, sentence_end_token) for x in sentences]
 
-    #print 'Parsed %d sentences.' % (len(sentences))
+    print 'Parsed %d sentences.' % (len(sentences))
     return sentences
 
 if (os.path.isfile(_PICKLE_IDX_WRD_FILE) and os.path.isfile(_PICKLE_WRD_IDX_FILE)):
@@ -54,7 +58,7 @@ else:
 
     # Count the word frequencies
     word_freq = nltk.FreqDist(itertools.chain(*tokenized_sentences))
-    #print 'Found %d unique words tokens.' % len(word_freq.items())
+    print 'Found %d unique words tokens.' % len(word_freq.items())
 
     # Get the most common words and build index_to_word and word_to_index vectors
     vocab = word_freq.most_common(_VOCABULARY_SIZE-1)
