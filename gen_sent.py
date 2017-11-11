@@ -133,7 +133,4 @@ def generate_quote():
         if  4 >= len(new_quote.split('\n')) > 2:
             return new_quote
 
-output = generate_quote()
-
-with open('output.txt','w') as f:
-    f.write(output)
+print generate_quote()
