@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-6">
+    <br/>
+    <img src="imgs/shakespeare.png">
+  </div>
+  <div class="col-md-5">
+    <a style="font-size: 25px;" class="btn btn-lg btn-primary btn-block" href="/tragedy">
+      Tragedy
+    </a>
+    <a style="font-size: 25px;" class="btn btn-lg btn-primary btn-block" href="/comedy">
+      Comedy
+    </a>
+    <a style="font-size: 25px;" class="btn btn-lg btn-primary btn-block" href="/history">
+      History
+    </a>
+    <br/><br/>
+    <h1>
+      {{#if content}}
+        &#x201C{{content}}&#x201D
+      {{/if}}
+    </h1>
+  </div>
+</div>
