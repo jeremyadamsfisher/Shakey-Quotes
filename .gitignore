@@ -99,3 +99,6 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# demo_app
+demo_app/node_modules/
