@@ -12,7 +12,7 @@ from datetime import datetime
 from utils import *
 from rnn_theano import RNNTheano
 
-_MODEL_FILE = 'data/rnn-theano-80-5000-2017-11-10-08-01-06.npz'
+_MODEL_FILE = 'data/rnn-theano-80-5000-2017-11-10-17-55-23.npz'
 _SRC_DATA = 'data/Shakespeare_Tragedies.csv'
 
 
@@ -25,7 +25,7 @@ sentence_end_token = 'SENTENCE_END'
 
 
 if _SRC_DATA.endswith('csv'):
-    print 'Reading CSV file...'
+    #print 'Reading CSV file...'
     with open(_SRC_DATA, 'rU') as f:
         reader = csv.reader(f, skipinitialspace=True)
         reader.next()
@@ -34,7 +34,7 @@ if _SRC_DATA.endswith('csv'):
         # Append SENTENCE_START and SENTENCE_END
         sentences = ['%s %s %s' % (sentence_start_token, x, sentence_end_token) for x in sentences]
 
-print 'Parsed %d sentences.' % (len(sentences))
+#print 'Parsed %d sentences.' % (len(sentences))
 
 
 # Tokenize the sentences into words
@@ -54,27 +54,67 @@ word_to_index = dict([(w,i) for i,w in enumerate(index_to_word)])
 model = RNNTheano(_VOCABULARY_SIZE, hidden_dim=_HIDDEN_DIM)
 load_model_parameters_theano(_MODEL_FILE, model)
 
-def generate_sentence(model):
-    # We start the sentence with the start token
-    new_sentence = [word_to_index[sentence_start_token]]
-    # Repeat until we get an end token
-    while not new_sentence[-1] == word_to_index[sentence_end_token]:
-        next_word_probs = model.forward_propagation(new_sentence)
-        sampled_word = word_to_index[unknown_token]
-        # We don't want to sample unknown words
-        while sampled_word == word_to_index[unknown_token]:
-            samples = np.random.multinomial(1, next_word_probs[-1])
-            sampled_word = np.argmax(samples)
-        new_sentence.append(sampled_word)
-    sentence_str = [index_to_word[x] for x in new_sentence[1:-1]]
-    return sentence_str
+def clean_up_sentence(sent):
+    clean_dict = {' ,': ',',
+                  ' !': '!',
+                  ' :': ':',
+                  ' ?': '?',
+                  ' .': '.',
+                  ' \'': '\'',
+                  ' --':'--'}
 
-num_sentences = 250
-senten_min_length = 7
+    for bad, good in clean_dict.iteritems():
+        sent = sent.replace(bad, good)
 
-for i in range(num_sentences):
-    sent = []
-    # We want long sentences, not sentences with one or two words
-    while len(sent) < senten_min_length:
-        sent = generate_sentence(model)
-    print " ".join(sent).replace(' ,', ',').capitalize()
+    pms = clean_dict.values()
+
+    for d_pm in itertools.product(pms, pms):
+        d_pm = str(d_pm[0]) + str(d_pm[1])
+        sent = sent.replace(d_pm, '')
+
+    for pm in pms:
+        if sent.startswith(pm):
+            sent = sent[1:]
+
+    sent = sent.capitalize()
+
+    return(sent)
+
+
+def generate_sentence(senten_min_length):
+    sentence_array = []
+
+    while len(sentence_array) < senten_min_length:
+        # We start the sentence with the start token
+        new_sentence = [word_to_index[sentence_start_token]]
+        # Repeat until we get an end token
+        while not new_sentence[-1] == word_to_index[sentence_end_token]:
+            next_word_probs = model.forward_propagation(new_sentence)
+            sampled_word = word_to_index[unknown_token]
+            # We don't want to sample unknown words
+            while sampled_word == word_to_index[unknown_token]:
+                samples = np.random.multinomial(1, next_word_probs[-1])
+                sampled_word = np.argmax(samples)
+            new_sentence.append(sampled_word)
+        sentence_array = [index_to_word[x] for x in new_sentence[1:-1]]
+
+    sentence_str = ' '.join(sentence_array)
+    return clean_up_sentence(sentence_str)
+
+
+def generate_subquote():
+    new_sentence = generate_sentence(7)
+    if new_sentence.endswith('.') or new_sentence.endswith('?') or new_sentence.endswith('!'):
+        return new_sentence
+    else:
+        new_sentence = new_sentence + '\n' + generate_subquote()
+        return new_sentence
+
+
+def generate_quote():
+    while True:
+        new_quote = generate_subquote()
+        if  4 >= len(new_quote.split('\n')) > 2:
+            return new_quote
+
+print generate_quote()
