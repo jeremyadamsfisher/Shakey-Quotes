@@ -5,16 +5,20 @@
     <img src="imgs/shakespeare.png">
   </div>
   <div class="col-md-5">
-    <a style="font-size: 25px;" class="btn btn-lg btn-primary btn-block" href="/tragedy">
+    <a style="font-size: 25px;" onclick="spinner();" class="btn btn-lg btn-primary btn-block" href="/tragedy">
       Tragedy
     </a>
-    <a style="font-size: 25px;" class="btn btn-lg btn-primary btn-block" href="/comedy">
+    <a style="font-size: 25px;" onclick="spinner();" class="btn btn-lg btn-primary btn-block" href="/comedy">
       Comedy
     </a>
-    <a style="font-size: 25px;" class="btn btn-lg btn-primary btn-block" href="/history">
+    <a style="font-size: 25px;" onclick="spinner();" class="btn btn-lg btn-primary btn-block" href="/history">
       History
     </a>
     <br/><br/>
+    <div id="thinker" style="display:none;">
+      <br/><br/>
+      <img class="center-block" style="height:150px;width:150px" src="imgs/thinker.gif">
+    </div>
     <h1>
       {{#if content}}
         &#x201C{{content}}&#x201D
@@ -22,3 +26,8 @@
     </h1>
   </div>
 </div>
+<script>
+function spinner() {
+  $('#thinker').show();
+}
+</script>

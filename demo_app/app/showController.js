@@ -2,29 +2,34 @@ var child_process = require('child_process');
 var resp;
 var catcher = function(error, stdout, stderr) {
   if (error) {
-    return resp.render('robo_bard', {content: stdout});
+    resp.render('robo_bard', {content: error});
   }
   if (stdout) {
-    return resp.render('robo_bard', {content: stdout});
+    resp.render('robo_bard', {content: stdout});
   } else if (stderr) {
-    return resp.render('robo_bard', {content: stdout});
+    resp.render('robo_bard', {content: stderr});
   }
+
+  process.chdir('./demo_app');
+}
+
+var launchGenSent = function(type, response) {
+  resp = response;
+  process.chdir('..');
+  child_process.execFile('python',['gen_sent.py', type], {}, catcher);
 }
 
 module.exports = {
   show: function (request, response) {
-   return response.render('robo_bard');
+    return response.render('robo_bard');
   },
   tragedy: function(request, response) {
-   resp = response;
-   child_process.execFile('python',['./ml_script/gen_sent.py', 'tragedy'], {}, catcher);
+    launchGenSent('tragedy', response);
   },
   comedy: function(request, response) {
-   resp = response;
-   child_process.execFile('python',['./ml_script/gen_sent.py', 'comedy'], {}, catcher);
+    launchGenSent('comedy', response);
   },
   history: function(request, response) {
-   resp = response;
-   child_process.execFile('python',['./ml_script/gen_sent.py', 'history'], {}, catcher);
+    launchGenSent('history', response);
   }
 }
