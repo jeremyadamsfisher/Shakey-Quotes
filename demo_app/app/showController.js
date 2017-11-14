@@ -28,8 +28,5 @@ module.exports = {
   },
   comedy: function(request, response) {
     launchGenSent('comedy', response);
-  },
-  history: function(request, response) {
-    launchGenSent('history', response);
   }
 }
